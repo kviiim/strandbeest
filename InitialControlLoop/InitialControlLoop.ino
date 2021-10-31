@@ -9,9 +9,9 @@ Adafruit_DCMotor *leftMotor1 = AFMS.getMotor(4);
 Adafruit_DCMotor* leftMotorArray[] {leftMotor1, leftMotor2};
 Adafruit_DCMotor* rightMotorArray[] {rightMotor1, rightMotor2};
 
-int baseSpeed = 30;
-int rightSpeed = baseSpeed;
-int leftSpeed = baseSpeed;
+float baseSpeed = 30;
+float rightSpeed = baseSpeed;
+float leftSpeed = baseSpeed;
 //speed difference will be added to the left side and subtracted from right, + = turn right
 int speedDifference = 5;
 
@@ -39,7 +39,9 @@ void loop() {
     }
     else if (input[0] == 's') {
       //modify base speed
-      baseSpeed = (input.substring(1)).toInt();
+      baseSpeed = (input.substring(1)).toFloat();
+      leftSpeed = baseSpeed + speedDifference;
+      rightSpeed = baseSpeed + speedDifference;
     }
     else {
       Serial.println("Invalid Input");
