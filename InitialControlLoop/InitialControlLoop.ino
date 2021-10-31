@@ -31,11 +31,15 @@ void loop() {
   if(Serial.available()){
     input = Serial.readStringUntil('\n');
     // modify turn speed
-    if (input[0] == 's') {
+    if (input[0] == 'd') {
       speedDifference = (input.substring(1)).toFloat();
       //adjust speed based on input
       leftSpeed = baseSpeed + speedDifference;
       rightSpeed = baseSpeed + speedDifference;
+    }
+    else if (input[0] == 's') {
+      //modify base speed
+      baseSpeed = (input.substring(1)).toInt();
     }
     else {
       Serial.println("Invalid Input");
