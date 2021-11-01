@@ -10,6 +10,8 @@ hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 cv2.startWindowThread()
 
 Obj = Serial_cmd()
+time.sleep(2)
+print('serial connected?')
 
 if not vid.isOpened() or vid == None:
     raise IOError("Cannot open webcam")
@@ -35,7 +37,8 @@ while(True):
     if len(max_box) != 0:
         max_box_center_x = max_box[0] + (max_box[2]/2)
         offset_x = -1*((frame.shape[0]/2) - (max_box_center_x))
-        offset_string = 's' + str(offset_x)
+        offset_string = 'e' + str(offset_x)
+        print(offset_string)
         Obj.write_data(offset_string)
 
     boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])

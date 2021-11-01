@@ -12,6 +12,7 @@ class Serial_cmd:
             self.connected = False
             devices = list_ports.comports()
             for device in devices:
+                print(device, 'device')
                 if (device.vid, device.pid) in Serial_cmd.Arduino_IDs:
                     try:
                         self.dev = serial.Serial(device.device, 115200)
@@ -28,6 +29,6 @@ class Serial_cmd:
             except:
                 self.edev = None
                 self.connected = False
-    def write_data(self, string_to_write):
+    def write_data_to_arduino(self, string_to_write):
         if self.connected:
-            self.write_data(string_to_write)
+            self.dev.write(str.encode(string_to_write))
