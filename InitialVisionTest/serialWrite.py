@@ -12,7 +12,6 @@ class Serial_cmd:
             self.connected = False
             devices = list_ports.comports()
             for device in devices:
-                print(device, 'device')
                 if (device.vid, device.pid) in Serial_cmd.Arduino_IDs:
                     try:
                         self.dev = serial.Serial(device.device, 115200)

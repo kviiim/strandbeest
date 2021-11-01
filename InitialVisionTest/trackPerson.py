@@ -29,24 +29,25 @@ while(True):
     # returns the bounding boxes for the detected objects
     boxes, weights = hog.detectMultiScale(frame_resized, winStride=(8,8) )
 
+    #find the largest box
     max_box = np.array([])
     for box in boxes:
         if len(max_box) == 0 or box[2] * box[3] > max_box[2]*max_box[3]:
             max_box = box
     
+    #if there is a largest box
     if len(max_box) != 0:
         max_box_center_x = max_box[0] + (max_box[2]/2)
         offset_x = -1*((frame.shape[0]/2) - (max_box_center_x))
         offset_string = 'e' + str(offset_x)
         print(offset_string)
-        Obj.write_data(offset_string)
+        Obj.write_data_to_arduino(offset_string)
 
-    boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
-
-    for (xA, yA, xB, yB) in boxes:
-        # display the detected boxes in the colour picture
+        max_box = [max_box[0], max_box[1], max_box[0] + max_box[2], max_box[1] + max_box[3]]
+        xA, yA, xB, yB = max_box
+        # display the detected largest box in the colour picture
         cv2.rectangle(frame_resized, (xA, yA), (xB, yB),
-                          (0, 255, 0), 2)
+                            (0, 255, 0), 2)
            
     cv2.imshow('frame', frame_resized)
     #q to quit

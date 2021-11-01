@@ -1,19 +1,22 @@
 #include <Adafruit_MotorShield.h>
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-Adafruit_DCMotor *rightMotor2 = AFMS.getMotor(1);
-Adafruit_DCMotor *leftMotor2 = AFMS.getMotor(2);
+Adafruit_DCMotor *rightMotor2 = AFMS.getMotor(2);
+Adafruit_DCMotor *leftMotor2 = AFMS.getMotor(1);
 Adafruit_DCMotor *rightMotor1 = AFMS.getMotor(3);
 Adafruit_DCMotor *leftMotor1 = AFMS.getMotor(4);
 
 Adafruit_DCMotor* leftMotorArray[] {leftMotor1, leftMotor2};
 Adafruit_DCMotor* rightMotorArray[] {rightMotor1, rightMotor2};
 
-float baseSpeed = 30;
+float baseSpeed = 140;
 float rightSpeed = baseSpeed;
 float leftSpeed = baseSpeed;
-//speed difference will be added to the left side and subtracted from right, + = turn right
-int speedDifference = 5;
+//error will be added to the left side and subtracted from right, + = turn right
+int error = 0;
+float errorMultiplier = .8;
+
+
 
 String input = "";
 
@@ -31,17 +34,17 @@ void loop() {
   if(Serial.available()){
     input = Serial.readStringUntil('\n');
     // modify turn speed
-    if (input[0] == 'd') {
-      speedDifference = (input.substring(1)).toFloat();
+    if (input[0] == 'e') {
+      error = (input.substring(1)).toFloat();
       //adjust speed based on input
-      leftSpeed = baseSpeed + speedDifference;
-      rightSpeed = baseSpeed + speedDifference;
+      leftSpeed = baseSpeed + (error*errorMultiplier);
+      rightSpeed = baseSpeed + (error*errorMultiplier);
     }
     else if (input[0] == 's') {
       //modify base speed
       baseSpeed = (input.substring(1)).toFloat();
-      leftSpeed = baseSpeed + speedDifference;
-      rightSpeed = baseSpeed + speedDifference;
+      leftSpeed = baseSpeed + (error*errorMultiplier);
+      rightSpeed = baseSpeed + (error*errorMultiplier);
     }
     else {
       Serial.println("Invalid Input");
