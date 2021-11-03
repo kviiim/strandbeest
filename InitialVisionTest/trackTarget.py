@@ -6,6 +6,7 @@ import serial.tools.list_ports as list_ports
 import time
 from serialWrite import Serial_cmd
 
+
 vid = cv2.VideoCapture(0)
 
 #224, 191, 105
@@ -13,7 +14,7 @@ vid = cv2.VideoCapture(0)
 light_boundary = (170, 140, 60)
 dark_boundary = (255, 200, 110)
 
-Obj = Serial_cmd()
+ser = Serial_cmd()
 time.sleep(2)
 print('serial connected?')
               
@@ -33,11 +34,10 @@ while(True):
         x,y,w,h = cv2.boundingRect(c)
 
         center_x = x + (w/2)
-        offset_x = -1*((frame.shape[0]) - center_x)
-        offset_string = 'e' + str(offset_x)
-        print(offset_string)
-        Obj.write_data_to_arduino(offset_string)
-
+        offset_x = ((mask.shape[1]/2) - center_x)
+        offset_string = 'e' + str(offset_x) + '\n'
+        print(w, x, offset_string)
+        ser.write_data_to_arduino(offset_string)
         # draw the biggest contour (c) in green
         cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),2)
 

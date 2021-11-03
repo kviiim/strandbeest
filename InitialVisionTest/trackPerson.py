@@ -38,9 +38,9 @@ while(True):
     #if there is a largest box
     if len(max_box) != 0:
         max_box_center_x = max_box[0] + (max_box[2]/2)
-        offset_x = -1*((frame.shape[0]/2) - (max_box_center_x))
+        offset_x = ((frame.shape[1]/2) - (max_box_center_x))
         offset_string = 'e' + str(offset_x)
-        print(offset_string)
+        # print(offset_string)
         Obj.write_data_to_arduino(offset_string)
 
         max_box = [max_box[0], max_box[1], max_box[0] + max_box[2], max_box[1] + max_box[3]]

@@ -9,12 +9,13 @@ Adafruit_DCMotor *leftMotor1 = AFMS.getMotor(4);
 Adafruit_DCMotor* leftMotorArray[] {leftMotor1, leftMotor2};
 Adafruit_DCMotor* rightMotorArray[] {rightMotor1, rightMotor2};
 
-float baseSpeed = 140;
+float baseSpeed = 90;
+float baseCorrection = 10;
 float rightSpeed = baseSpeed;
-float leftSpeed = baseSpeed;
+float leftSpeed = baseSpeed + baseCorrection;
 //error will be added to the left side and subtracted from right, + = turn right
 int error = 0;
-float errorMultiplier = .8;
+float errorMultiplier = .3;
 
 
 
@@ -31,19 +32,19 @@ void setup() {
 
 void loop() {
   // get serial input to change parameters
-  if(Serial.available()){
+  if(Serial.available() > 0){
     input = Serial.readStringUntil('\n');
     // modify turn speed
     if (input[0] == 'e') {
       error = (input.substring(1)).toFloat();
       //adjust speed based on input
-      leftSpeed = baseSpeed + (error*errorMultiplier);
+      leftSpeed = baseSpeed + baseCorrection - (error*errorMultiplier);
       rightSpeed = baseSpeed + (error*errorMultiplier);
     }
     else if (input[0] == 's') {
       //modify base speed
       baseSpeed = (input.substring(1)).toFloat();
-      leftSpeed = baseSpeed + (error*errorMultiplier);
+      leftSpeed = baseSpeed - (error*errorMultiplier);
       rightSpeed = baseSpeed + (error*errorMultiplier);
     }
     else {

@@ -30,4 +30,7 @@ class Serial_cmd:
                 self.connected = False
     def write_data_to_arduino(self, string_to_write):
         if self.connected:
-            self.dev.write(str.encode(string_to_write))
+            self.dev.write(string_to_write.encode())
+    def read_data(self):
+        if self.connected:
+            print(self.dev.readline().decode().rstrip())
