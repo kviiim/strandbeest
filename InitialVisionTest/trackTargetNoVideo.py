@@ -5,9 +5,16 @@ import serial
 import serial.tools.list_ports as list_ports
 import time
 from serialWrite import Serial_cmd
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
+# vid = cv2.VideoCapture(-1)
+# initialize the camera and grab a reference to the raw camera capture
+camera = PiCamera()
+camera.resolution = (640, 480)
+camera.framerate = 32
+rawCapture = PiRGBArray(camera, size=(640, 480))
 
-vid = cv2.VideoCapture(-1)
 
 #224, 191, 105
 #173, 143, 61
@@ -18,9 +25,9 @@ ser = Serial_cmd()
 time.sleep(2)
 print('serial connected?')
               
-while(True):
+for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     #get frame
-    ret, frame = vid.read()
+    # ret, frame = vid.read()
 
     mask = cv2.inRange(frame, light_boundary, dark_boundary)
 

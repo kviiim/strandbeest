@@ -10,12 +10,12 @@ Adafruit_DCMotor* leftMotorArray[] {leftMotor1, leftMotor2};
 Adafruit_DCMotor* rightMotorArray[] {rightMotor1, rightMotor2};
 
 float baseSpeed = 90;
-float baseCorrection = 10;
+float baseCorrection = 30;
 float rightSpeed = baseSpeed;
 float leftSpeed = baseSpeed + baseCorrection;
 //error will be added to the left side and subtracted from right, + = turn right
 int error = 0;
-float errorMultiplier = .3;
+float errorMultiplier = .15;
 
 
 
