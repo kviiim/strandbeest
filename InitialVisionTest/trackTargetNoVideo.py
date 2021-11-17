@@ -36,14 +36,11 @@ while(True):
         center_x = x + (w/2)
         offset_x = ((mask.shape[1]/2) - center_x)
         offset_string = 'e' + str(offset_x) + '\n'
-        # print(w, x, offset_string)
+        print(offset_string)
         ser.write_data_to_arduino(offset_string)
         # draw the biggest contour (c) in green
         cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),2)
 
-  
-    cv2.imshow('frame', result)
-    #q to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
   
