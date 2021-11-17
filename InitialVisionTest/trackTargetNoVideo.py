@@ -7,7 +7,7 @@ import time
 from serialWrite import Serial_cmd
 
 
-vid = cv2.VideoCapture(0)
+vid = cv2.VideoCapture(-1)
 
 #224, 191, 105
 #173, 143, 61
