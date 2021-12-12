@@ -1,28 +1,26 @@
 #include <Adafruit_MotorShield.h>
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-
+//setup motors
 Adafruit_DCMotor *rightMotor1 = AFMS.getMotor(1);
-Adafruit_DCMotor *leftMotor1 = AFMS.getMotor(3);
-Adafruit_DCMotor *backMotor1 = AFMS.getMotor(2);
-
-
+Adafruit_DCMotor *leftMotor1 = AFMS.getMotor(2);
+Adafruit_DCMotor *backMotor1 = AFMS.getMotor(3);
 Adafruit_DCMotor* leftMotorArray[] {leftMotor1};
 Adafruit_DCMotor* rightMotorArray[] {rightMotor1};
 
-float baseSpeed = 180;
-float baseCorrection = 30;
+//define base speeds
+float baseSpeed = 255;
 float rightSpeed = baseSpeed;
 float leftSpeed = baseSpeed;
+float backSpeed = baseSpeed;
 //error will be added to the left side and subtracted from right, + = turn right
 int error = 0;
-float errorMultiplier = .15;
-
-
+float errorMultiplier = .45;
 
 String input = "";
 
 void setup() {
+  //start serial
   Serial.begin(115200);
   //check coms with motor shield
   if (!AFMS.begin()) {   
@@ -39,14 +37,25 @@ void loop() {
     if (input[0] == 'e') {
       error = (input.substring(1)).toFloat();
       //adjust speed based on input
-      leftSpeed = baseSpeed - (error*errorMultiplier);
-      rightSpeed = baseSpeed + (error*errorMultiplier);
+      if (error != 0){
+        leftSpeed = baseSpeed + baseCorrection - (error*errorMultiplier);
+        rightSpeed = baseSpeed + (error*errorMultiplier);
+        backSpeed = baseSpeed;
+      }
+      //stop robot if error exactly 0
+      else{
+        leftSpeed = 0;
+        rightSpeed = 0;
+        backSpeed = 0;
+      }
+
     }
     else if (input[0] == 's') {
       //modify base speed
       baseSpeed = (input.substring(1)).toFloat();
       leftSpeed = baseSpeed - (error*errorMultiplier);
       rightSpeed = baseSpeed + (error*errorMultiplier);
+      backSpeed = baseSpeed;
     }
     else {
       Serial.println("Invalid Input");
@@ -65,7 +74,8 @@ void loop() {
     leftMotorArray[motor]->run(FORWARD);
   }
 
-  backMotor1->setSpeed(baseSpeed);
+  //run back motor at base speed
+  backMotor1->setSpeed(-1*255);
   backMotor1->run(FORWARD);
 
 }

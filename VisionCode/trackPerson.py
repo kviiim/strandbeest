@@ -9,10 +9,12 @@ hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 cv2.startWindowThread()
 
+# connect to serial
 Obj = Serial_cmd()
 time.sleep(2)
 print('serial connected?')
 
+# find webcamn
 if not vid.isOpened() or vid == None:
     raise IOError("Cannot open webcam")
 
@@ -46,10 +48,12 @@ while(True):
                             (0, 255, 0), 2)
     else:
         offset_x = 0
+
+    #write to serial, either offset or 0 if there isn't a person in frame
     offset_string = 'e' + str(offset_x)
     print(offset_x)
     Obj.write_data_to_arduino(offset_string)
-    #cv2.imshow('frame', frame_resized)
+
     #q to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
