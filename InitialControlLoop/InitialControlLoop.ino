@@ -1,18 +1,19 @@
 #include <Adafruit_MotorShield.h>
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-Adafruit_DCMotor *rightMotor2 = AFMS.getMotor(2);
-Adafruit_DCMotor *leftMotor2 = AFMS.getMotor(1);
-Adafruit_DCMotor *rightMotor1 = AFMS.getMotor(3);
-Adafruit_DCMotor *leftMotor1 = AFMS.getMotor(4);
 
-Adafruit_DCMotor* leftMotorArray[] {leftMotor1, leftMotor2};
-Adafruit_DCMotor* rightMotorArray[] {rightMotor1, rightMotor2};
+Adafruit_DCMotor *rightMotor1 = AFMS.getMotor(1);
+Adafruit_DCMotor *leftMotor1 = AFMS.getMotor(3);
+Adafruit_DCMotor *backMotor1 = AFMS.getMotor(2);
 
-float baseSpeed = 90;
+
+Adafruit_DCMotor* leftMotorArray[] {leftMotor1};
+Adafruit_DCMotor* rightMotorArray[] {rightMotor1};
+
+float baseSpeed = 180;
 float baseCorrection = 30;
 float rightSpeed = baseSpeed;
-float leftSpeed = baseSpeed + baseCorrection;
+float leftSpeed = baseSpeed;
 //error will be added to the left side and subtracted from right, + = turn right
 int error = 0;
 float errorMultiplier = .15;
@@ -38,7 +39,7 @@ void loop() {
     if (input[0] == 'e') {
       error = (input.substring(1)).toFloat();
       //adjust speed based on input
-      leftSpeed = baseSpeed + baseCorrection - (error*errorMultiplier);
+      leftSpeed = baseSpeed - (error*errorMultiplier);
       rightSpeed = baseSpeed + (error*errorMultiplier);
     }
     else if (input[0] == 's') {
@@ -63,5 +64,8 @@ void loop() {
     rightMotorArray[motor]->run(FORWARD);
     leftMotorArray[motor]->run(FORWARD);
   }
+
+  backMotor1->setSpeed(baseSpeed);
+  backMotor1->run(FORWARD);
 
 }
