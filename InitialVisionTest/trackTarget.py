@@ -27,7 +27,6 @@ while(True):
     # detect the contours on the binary image using cv2.CHAIN_APPROX_NONE
     contours, hierarchy = cv2.findContours(image=mask, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
     result = frame.copy()
-
     if len(contours) > 0:
         c = max(contours, key = cv2.contourArea)
 
@@ -36,13 +35,13 @@ while(True):
         center_x = x + (w/2)
         offset_x = ((mask.shape[1]/2) - center_x)
         offset_string = 'e' + str(offset_x) + '\n'
-        # print(w, x, offset_string)
+        print(w, x, offset_string)
         ser.write_data_to_arduino(offset_string)
         # draw the biggest contour (c) in green
         cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),2)
 
   
-    cv2.imshow('frame', result)
+    #cv2.imshow('frame', result)
     #q to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
